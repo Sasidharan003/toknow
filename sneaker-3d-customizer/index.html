@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aether 3D Sneaker Studio - High-End Customizer</title>
+  
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cyber: {
+              bg: '#080914',
+              cyan: '#00f2fe',
+              magenta: '#f355da',
+              violet: '#7f00ff',
+              light: '#f5f5f7'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Embedded High-End CSS Styles & Animations -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
+
+    :root {
+      --neon-cyan: #00f2fe;
+      --neon-magenta: #f355da;
+      --neon-violet: #7f00ff;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      background-color: #080914;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Outfit', sans-serif;
+    }
+
+    /* Glassmorphism Panels */
+    .glass-panel {
+      background: rgba(13, 14, 33, 0.65);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.02);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .glass-card:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.12);
+      transform: translateY(-2px);
+    }
+
+    /* Custom Webkit Scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(8, 9, 20, 0.5);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 9999px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.30);
+    }
+
+    /* Pulsing Glowing Animations */
+    @keyframes neonPulse {
+      0%, 100% {
+        box-shadow: 0 0 4px rgba(0, 242, 254, 0.2), 0 0 12px rgba(0, 242, 254, 0.1);
+      }
+      50% {
+        box-shadow: 0 0 10px rgba(0, 242, 254, 0.6), 0 0 20px rgba(0, 242, 254, 0.3);
+      }
+    }
+
+    .neon-pulse-cyan {
+      animation: neonPulse 3s infinite alternate;
+    }
+
+    @keyframes neonPulseMag {
+      0%, 100% {
+        box-shadow: 0 0 4px rgba(243, 85, 218, 0.2), 0 0 12px rgba(243, 85, 218, 0.1);
+      }
+      50% {
+        box-shadow: 0 0 10px rgba(243, 85, 218, 0.6), 0 0 20px rgba(243, 85, 218, 0.3);
+      }
+    }
+
+    .neon-pulse-magenta {
+      animation: neonPulseMag 3s infinite alternate;
+    }
+
+    /* Neon Text Shadows */
+    .neon-text-cyan {
+      text-shadow: 0 0 8px rgba(0, 242, 254, 0.6);
+    }
+
+    .neon-text-magenta {
+      text-shadow: 0 0 8px rgba(243, 85, 218, 0.6);
+    }
+
+    /* Animated Gradient flows */
+    .gradient-text-flow {
+      background: linear-gradient(135deg, var(--neon-cyan) 0%, var(--neon-magenta) 50%, var(--neon-violet) 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shine 4s linear infinite;
+    }
+
+    @keyframes shine {
+      to {
+        background-position: 200% center;
+      }
+    }
+
+    .slide-in-right {
+      animation: slideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes slideInRight {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    /* Active States Indicators */
+    .active-part {
+      border-color: var(--neon-cyan) !important;
+      color: var(--neon-cyan) !important;
+    }
+
+    .active-finish {
+      border-color: var(--neon-magenta) !important;
+      background: rgba(243, 85, 218, 0.1) !important;
+    }
+  </style>
+</head>
+<body class="bg-cyber-bg text-white h-screen overflow-hidden font-sans relative select-none">
+
+  <!-- Ambient Glow Effects -->
+  <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-cyber-cyan/10 blur-[120px] pointer-events-none z-0"></div>
+  <div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-cyber-magenta/10 blur-[120px] pointer-events-none z-0"></div>
+
+  <!-- WebGL Render Container -->
+  <div id="canvas-container" class="absolute inset-0 w-full h-full z-0 cursor-grab active:cursor-grabbing"></div>
+
+  <!-- Foreground UI Overlay Layer -->
+  <div class="absolute inset-0 flex flex-col justify-between p-4 md:p-6 pointer-events-none z-10">
+    
+    <!-- HEADER BAR -->
+    <header class="w-full flex items-center justify-between pointer-events-auto">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyber-cyan to-cyber-magenta flex items-center justify-center shadow-lg shadow-cyber-cyan/20">
+          <i data-lucide="zap" class="w-5 h-5 text-white animate-pulse"></i>
+        </div>
+        <div>
+          <h1 class="text-xl md:text-2xl font-extrabold tracking-wider bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">AETHER</h1>
+          <p class="text-[9px] md:text-[10px] uppercase tracking-widest text-cyber-cyan font-semibold font-mono">3D Sneaker Lab</p>
+        </div>
+      </div>
+
+      <!-- Mock Checkout Toggle Button -->
+      <button id="btn-checkout" class="group flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full py-1.5 pl-4 pr-2.5 transition duration-300 shadow-lg">
+        <span class="text-sm font-semibold font-mono tracking-tight text-cyber-cyan group-hover:text-white">$189.99</span>
+        <div class="w-7 h-7 rounded-full bg-gradient-to-tr from-cyber-cyan to-cyber-magenta flex items-center justify-center">
+          <i data-lucide="shopping-bag" class="w-3.5 h-3.5 text-white"></i>
+        </div>
+      </button>
+    </header>
+
+    <!-- CENTER CONTENT VIEWPORTS -->
+    <div class="flex-1 flex justify-between items-center my-4 overflow-hidden relative">
+      
+      <!-- LEFT DESKTOP PANEL: INSTANT DESIGN PRESETS -->
+      <aside class="hidden lg:flex flex-col gap-3 max-w-[190px] self-start mt-6 pointer-events-auto">
+        <div class="glass-panel rounded-2xl p-4 flex flex-col gap-3 shadow-2xl">
+          <div>
+            <h2 class="text-xs uppercase font-extrabold tracking-widest text-gray-400">Style Presets</h2>
+            <p class="text-[10px] text-gray-500 mt-0.5 font-sans">Instant theme apply</p>
+          </div>
+          
+          <button data-preset="cyberpunk" class="glass-card w-full flex items-center gap-3 p-2 rounded-xl text-left border border-white/5">
+            <span class="w-4 h-4 rounded-full bg-gradient-to-tr from-cyber-magenta to-cyber-cyan shrink-0"></span>
+            <div>
+              <p class="text-xs font-semibold">Neon Cyber</p>
+              <p class="text-[9px] text-gray-500 font-mono">Pink & Cyan</p>
+            </div>
+          </button>
+
+          <button data-preset="stealth" class="glass-card w-full flex items-center gap-3 p-2 rounded-xl text-left border border-white/5">
+            <span class="w-4 h-4 rounded-full bg-neutral-900 border border-neutral-700 shrink-0"></span>
+            <div>
+              <p class="text-xs font-semibold">Stealth Noir</p>
+              <p class="text-[9px] text-gray-500 font-mono">Triple Black</p>
+            </div>
+          </button>
+
+          <button data-preset="whitegold" class="glass-card w-full flex items-center gap-3 p-2 rounded-xl text-left border border-white/5">
+            <span class="w-4 h-4 rounded-full bg-gradient-to-tr from-yellow-500 to-white shrink-0"></span>
+            <div>
+              <p class="text-xs font-semibold">White Gold</p>
+              <p class="text-[9px] text-gray-500 font-mono">Luxury Spec</p>
+            </div>
+          </button>
+
+          <button data-preset="sunset" class="glass-card w-full flex items-center gap-3 p-2 rounded-xl text-left border border-white/5">
+            <span class="w-4 h-4 rounded-full bg-gradient-to-tr from-orange-500 to-yellow-400 shrink-0"></span>
+            <div>
+              <p class="text-xs font-semibold">Sunset Glow</p>
+              <p class="text-[9px] text-gray-500 font-mono">Orange Glow</p>
+            </div>
+          </button>
+        </div>
+      </aside>
+
+      <!-- RIGHT SIDEBAR: DESIGN WORKSHOP CONTROLS -->
+      <aside class="glass-panel w-full sm:w-[350px] max-h-full overflow-y-auto rounded-3xl p-5 shadow-2xl flex flex-col gap-5 self-end sm:self-center pointer-events-auto border border-white/10 slide-in-right">
+        <!-- Dynamic Customizer Labels -->
+        <div class="flex items-center justify-between border-b border-white/10 pb-3">
+          <div>
+            <h2 class="text-xs uppercase font-extrabold tracking-widest text-cyber-cyan">Workshop</h2>
+            <p class="text-base font-semibold capitalize mt-0.5 text-white">Customizing: <span id="active-part-label" class="text-white">upper</span></p>
+          </div>
+          <span class="text-[10px] uppercase bg-white/5 px-2 py-1 rounded border border-white/5 font-mono text-gray-400">Step 2 of 3</span>
+        </div>
+
+        <!-- Section Selector tabs -->
+        <div class="flex flex-col gap-2">
+          <h3 class="text-[10px] uppercase font-bold tracking-widest text-gray-400">Select Section</h3>
+          <div class="grid grid-cols-3 gap-2">
+            <button data-part="upper" class="active-part text-xs py-2 px-1 rounded-xl border border-white/10 font-medium transition duration-300 capitalize text-center">upper</button>
+            <button data-part="sole" class="text-xs py-2 px-1 rounded-xl border border-white/10 font-medium transition duration-300 capitalize text-center text-gray-400">sole</button>
+            <button data-part="laces" class="text-xs py-2 px-1 rounded-xl border border-white/10 font-medium transition duration-300 capitalize text-center text-gray-400">laces</button>
+            <button data-part="mesh" class="text-xs py-2 px-1 rounded-xl border border-white/10 font-medium transition duration-300 capitalize text-center text-gray-400">toe mesh</button>
+            <button data-part="stripes" class="text-xs py-2 px-1 rounded-xl border border-white/10 font-medium transition duration-300 capitalize text-center text-gray-400">stripes</button>
+            <button data-part="heel" class="text-xs py-2 px-1 rounded-xl border border-white/10 font-medium transition duration-300 capitalize text-center text-gray-400">heel</button>
+          </div>
+        </div>
+
+        <!-- Palette Color select dots -->
+        <div class="flex flex-col gap-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-[10px] uppercase font-bold tracking-widest text-gray-400">Color Palette</h3>
+            <span class="text-[9px] text-gray-500 font-mono uppercase">Click 3D shoe directly too</span>
+          </div>
+          <!-- Selection colors grid -->
+          <div class="flex flex-wrap gap-2.5">
+            <button data-color="#00f2fe" class="w-8 h-8 rounded-full bg-[#00f2fe] border border-white/10 shadow-lg shadow-[#00f2fe]/20"></button>
+            <button data-color="#f355da" class="w-8 h-8 rounded-full bg-[#f355da] border border-white/10 shadow-lg shadow-[#f355da]/20"></button>
+            <button data-color="#ffeb3b" class="w-8 h-8 rounded-full bg-[#ffeb3b] border border-white/10 shadow-lg shadow-[#ffeb3b]/20"></button>
+            <button data-color="#ffffff" class="w-8 h-8 rounded-full bg-[#ffffff] border border-white/10 shadow-lg shadow-white/20"></button>
+            <button data-color="#111111" class="w-8 h-8 rounded-full bg-[#111111] border border-white/10 shadow-lg shadow-black/40"></button>
+            <button data-color="#ffd700" class="w-8 h-8 rounded-full bg-[#ffd700] border border-white/10 shadow-lg shadow-yellow-500/20"></button>
+            <button data-color="#7f00ff" class="w-8 h-8 rounded-full bg-[#7f00ff] border border-white/10 shadow-lg shadow-purple-600/20"></button>
+            <button data-color="#ff3e00" class="w-8 h-8 rounded-full bg-[#ff3e00] border border-white/10 shadow-lg shadow-orange-600/20"></button>
+            <button data-color="#1b1c30" class="w-8 h-8 rounded-full bg-[#1b1c30] border border-white/10 shadow-lg shadow-blue-900/20"></button>
+          </div>
+          
+          <!-- Custom hex picker -->
+          <div class="flex items-center gap-3 bg-white/5 border border-white/5 p-2 rounded-xl mt-1">
+            <input type="color" id="custom-color-picker" value="#ffffff" class="w-7 h-7 bg-transparent border-0 rounded cursor-pointer">
+            <span class="text-xs font-semibold text-gray-300 uppercase">Custom hex selector</span>
+          </div>
+        </div>
+
+        <!-- Material Finishes Grid -->
+        <div class="flex flex-col gap-2.5">
+          <h3 class="text-[10px] uppercase font-bold tracking-widest text-gray-400">Material Finish</h3>
+          <div class="grid grid-cols-2 gap-2">
+            <button data-finish="matte" class="active-finish text-xs py-2.5 px-2 rounded-xl border border-white/10 font-semibold flex items-center justify-center gap-2">
+              <i data-lucide="droplet" class="w-3.5 h-3.5 text-gray-400"></i> Matte
+            </button>
+            <button data-finish="glossy" class="text-xs py-2.5 px-2 rounded-xl border border-white/10 font-semibold flex items-center justify-center gap-2 text-gray-400">
+              <i data-lucide="sparkles" class="w-3.5 h-3.5 text-gray-400"></i> Glossy
+            </button>
+            <button data-finish="metallic" class="text-xs py-2.5 px-2 rounded-xl border border-white/10 font-semibold flex items-center justify-center gap-2 text-gray-400">
+              <i data-lucide="anvil" class="w-3.5 h-3.5 text-gray-400"></i> Metallic
+            </button>
+            <button data-finish="neon" class="text-xs py-2.5 px-2 rounded-xl border border-white/10 font-semibold flex items-center justify-center gap-2 text-gray-400">
+              <i data-lucide="radial-gradient" class="w-3.5 h-3.5 text-gray-400"></i> Neon Glow
+            </button>
+          </div>
+        </div>
+
+        <!-- Add to Basket trigger -->
+        <button id="btn-add-basket" class="w-full bg-gradient-to-r from-cyber-cyan to-cyber-violet hover:brightness-110 active:scale-[0.98] py-3.5 rounded-2xl font-bold tracking-wider uppercase transition shadow-lg shadow-cyber-cyan/20 flex items-center justify-center gap-2 text-sm mt-1">
+          <i data-lucide="plus-circle" class="w-4 h-4"></i> Add to basket
+        </button>
+      </aside>
+    </div>
+
+    <!-- BOTTOM BUTTONS NAVIGATION -->
+    <footer class="w-full flex items-center justify-between pointer-events-auto">
+      
+      <!-- Mobile presets panel -->
+      <div class="flex lg:hidden items-center gap-1 bg-white/5 border border-white/10 rounded-2xl p-1 shadow-lg">
+        <button data-preset="cyberpunk" class="w-7 h-7 rounded-lg bg-gradient-to-tr from-cyber-magenta to-cyber-cyan flex items-center justify-center text-[10px] font-bold shadow"></button>
+        <button data-preset="stealth" class="w-7 h-7 rounded-lg bg-neutral-900 border border-neutral-700 flex items-center justify-center text-[10px] font-bold shadow"></button>
+        <button data-preset="whitegold" class="w-7 h-7 rounded-lg bg-gradient-to-tr from-yellow-500 to-white flex items-center justify-center text-[10px] font-bold shadow"></button>
+        <button data-preset="sunset" class="w-7 h-7 rounded-lg bg-gradient-to-tr from-orange-500 to-yellow-400 flex items-center justify-center text-[10px] font-bold shadow"></button>
+      </div>
+
+      <div class="hidden lg:block text-xs font-semibold text-gray-500 font-mono">
+        DRAG TO ROTATE &bull; PINCH TO ZOOM &bull; MOUSE-CLICK MODEL TO SELECT PART
+      </div>
+
+      <!-- Floating Camera Utility controls -->
+      <div class="flex items-center gap-2.5 bg-white/5 border border-white/10 rounded-full p-1.5 shadow-lg">
+        <button id="btn-exploded" title="Exploded View (Component Split)" class="w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 border border-white/5 transition flex items-center justify-center text-gray-300 hover:text-white">
+          <i data-lucide="box" class="w-4 h-4"></i>
+        </button>
+        <button id="btn-rotate" title="Auto Rotate Scene" class="w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 border border-white/5 transition flex items-center justify-center text-gray-300 hover:text-white">
+          <i data-lucide="rotate-3d" class="w-4 h-4"></i>
+        </button>
+        <button id="btn-reset-cam" title="Reset Camera View" class="w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 border border-white/5 transition flex items-center justify-center text-gray-300 hover:text-white">
+          <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </footer>
+  </div>
+
+  <!-- CHECKOUT SUMMARY MODAL -->
+  <div id="cart-modal" class="hidden absolute inset-0 w-full h-full bg-black/60 backdrop-blur-md z-50 items-center justify-center p-4">
+    <div class="glass-panel w-full max-w-md rounded-3xl p-6 md:p-8 shadow-2xl border border-white/10 flex flex-col gap-6 relative">
+      <div class="flex items-center justify-between border-b border-white/10 pb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-cyber-cyan/15 flex items-center justify-center border border-cyber-cyan/30">
+            <i data-lucide="check-check" class="w-4 h-4 text-cyber-cyan"></i>
+          </div>
+          <div>
+            <h2 class="text-lg font-bold">Configure Success</h2>
+            <p class="text-xs text-gray-400 mt-0.5 font-sans">Review your bespoke custom sneaker spec</p>
+          </div>
+        </div>
+        <button id="btn-close-cart" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 border border-white/5 transition flex items-center justify-center text-gray-400 hover:text-white">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Item Specification List (Filled dynamically by JavaScript) -->
+      <div id="cart-summary-list" class="flex flex-col gap-3 py-2 max-h-[250px] overflow-y-auto pr-1"></div>
+
+      <!-- Price summary -->
+      <div class="flex items-center justify-between pt-4 border-t border-white/10">
+        <div>
+          <p class="text-xs text-gray-400 uppercase tracking-widest font-semibold font-mono">Bespoke Total</p>
+          <p id="cart-total-price" class="text-2xl font-extrabold text-cyber-cyan font-mono mt-0.5">$189.99</p>
+        </div>
+        <button class="bg-gradient-to-r from-cyber-cyan to-cyber-magenta hover:brightness-110 active:scale-[0.98] py-3 px-6 rounded-xl font-bold tracking-wide uppercase transition shadow-lg shadow-cyber-cyan/15 text-xs">
+          Proceed to payment
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Initialize lucide icons -->
+  <script>
+    lucide.createIcons();
+  </script>
+
+  <!-- Complete Embedded Module: Three.js engine and application controller -->
+  <script type="module">
+    import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
+    import { OrbitControls } from 'https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js';
+
+    // -------------------------------------------------------------
+    // THREE.JS ENGINE CLASS
+    // -------------------------------------------------------------
+    class SneakerScene {
+      constructor(container, onPartSelected) {
+        this.container = container;
+        this.onPartSelected = onPartSelected;
+
+        this.scene = null;
+        this.camera = null;
+        this.renderer = null;
+        this.controls = null;
+        
+        this.shoeParts = {};
+        this.originalPositions = {};
+        this.isExploded = false;
+        this.isAutoRotating = false;
+
+        this.raycaster = new THREE.Raycaster();
+        this.mouse = new THREE.Vector2();
+
+        this.init();
+        this.createSneaker();
+        this.createEnvironment();
+        this.animate();
+        
+        window.addEventListener('resize', this.onWindowResize.bind(this));
+        this.container.addEventListener('pointerdown', this.onPointerDown.bind(this));
+      }
+
+      init() {
+        const width = this.container.clientWidth;
+        const height = this.container.clientHeight;
+
+        this.scene = new THREE.Scene();
+        this.scene.background = null; 
+
+        this.camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
+        this.camera.position.set(3, 1.8, 3.5);
+
+        this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        this.renderer.setSize(width, height);
+        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        this.renderer.shadowMap.enabled = true;
+        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        this.renderer.toneMappingExposure = 1.1;
+        this.container.appendChild(this.renderer.domElement);
+
+        this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+        this.controls.enableDamping = true;
+        this.controls.dampingFactor = 0.05;
+        this.controls.maxPolarAngle = Math.PI / 2 - 0.05; 
+        this.controls.minDistance = 1.5;
+        this.controls.maxDistance = 8;
+        this.controls.target.set(0, 0.4, 0);
+      }
+
+      createSneaker() {
+        this.shoeGroup = new THREE.Group();
+        this.scene.add(this.shoeGroup);
+
+        const createPart = (name, geometry, position, rotation = null) => {
+          const material = new THREE.MeshStandardMaterial({
+            color: 0xcccccc,
+            roughness: 0.5,
+            metalness: 0.5,
+            shadowSide: THREE.DoubleSide
+          });
+
+          const mesh = new THREE.Mesh(geometry, material);
+          mesh.position.copy(position);
+          if (rotation) {
+            mesh.rotation.set(rotation.x, rotation.y, rotation.z);
+          }
+          mesh.castShadow = true;
+          mesh.receiveShadow = true;
+          mesh.name = name;
+
+          this.shoeGroup.add(mesh);
+          this.shoeParts[name] = mesh;
+          this.originalPositions[name] = position.clone();
+          return mesh;
+        };
+
+        // Sole
+        const soleGeom = new THREE.BoxGeometry(2.2, 0.28, 0.88);
+        createPart('sole', soleGeom, new THREE.Vector3(0, 0.14, 0));
+
+        // Upper
+        const upperGeom = new THREE.BoxGeometry(1.4, 0.52, 0.82);
+        createPart('upper', upperGeom, new THREE.Vector3(-0.15, 0.54, 0));
+
+        // Toe mesh
+        const meshGeom = new THREE.BoxGeometry(0.55, 0.32, 0.78);
+        createPart('mesh', meshGeom, new THREE.Vector3(0.72, 0.44, 0));
+
+        // Stripes (Left & Right)
+        const stripeLeftGeom = new THREE.BoxGeometry(0.75, 0.16, 0.04);
+        createPart('stripes', stripeLeftGeom, new THREE.Vector3(-0.1, 0.52, 0.42), new THREE.Vector3(0.1, 0, 0.15));
+        
+        const stripeRightGeom = new THREE.BoxGeometry(0.75, 0.16, 0.04);
+        createPart('stripes_right', stripeRightGeom, new THREE.Vector3(-0.1, 0.52, -0.42), new THREE.Vector3(-0.1, 0, -0.15));
+
+        // Laces
+        const laceGroup = new THREE.Group();
+        const laceGeom = new THREE.CylinderGeometry(0.02, 0.02, 0.65);
+        laceGeom.rotateX(Math.PI / 2); 
+
+        const lacePositions = [
+          new THREE.Vector3(0.2, 0.76, 0),
+          new THREE.Vector3(0.38, 0.72, 0),
+          new THREE.Vector3(0.56, 0.68, 0),
+        ];
+
+        lacePositions.forEach((pos, idx) => {
+          const mat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.8, metalness: 0.1 });
+          const laceMesh = new THREE.Mesh(laceGeom, mat);
+          laceMesh.position.copy(pos);
+          laceMesh.castShadow = true;
+          laceMesh.name = `lace_${idx}`;
+          laceGroup.add(laceMesh);
+        });
+
+        laceGroup.name = 'laces';
+        this.shoeGroup.add(laceGroup);
+        this.shoeParts['laces'] = laceGroup;
+        this.originalPositions['laces'] = new THREE.Vector3(0, 0, 0);
+
+        // Heel collar
+        const heelGeom = new THREE.BoxGeometry(0.4, 0.6, 0.82);
+        createPart('heel', heelGeom, new THREE.Vector3(-0.85, 0.58, 0));
+
+        this.shoeGroup.position.set(0.1, 0.1, 0);
+      }
+
+      createEnvironment() {
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+        this.scene.add(ambientLight);
+
+        const mainLight = new THREE.DirectionalLight(0xffffff, 1.2);
+        mainLight.position.set(4, 5, 3);
+        mainLight.castShadow = true;
+        mainLight.shadow.mapSize.width = 1024;
+        mainLight.shadow.mapSize.height = 1024;
+        mainLight.shadow.bias = -0.001;
+        this.scene.add(mainLight);
+
+        const fillLight = new THREE.DirectionalLight(0x00f2fe, 0.45);
+        fillLight.position.set(-4, 3, 2);
+        this.scene.add(fillLight);
+
+        const backLight = new THREE.DirectionalLight(0xf355da, 0.6);
+        backLight.position.set(0, 4, -4);
+        this.scene.add(backLight);
+
+        // Circular metallic platform
+        const platformGeom = new THREE.CylinderGeometry(1.6, 1.7, 0.08, 32);
+        const platformMat = new THREE.MeshStandardMaterial({
+          color: 0x0c0e20,
+          roughness: 0.3,
+          metalness: 0.85
+        });
+        const platform = new THREE.Mesh(platformGeom, platformMat);
+        platform.position.set(0, -0.04, 0);
+        platform.receiveShadow = true;
+        this.scene.add(platform);
+
+        // Neon outline ring
+        const ringGeom = new THREE.RingGeometry(1.62, 1.66, 32);
+        ringGeom.rotateX(-Math.PI / 2);
+        const ringMat = new THREE.MeshBasicMaterial({
+          color: 0x00f2fe,
+          side: THREE.DoubleSide
+        });
+        const ring = new THREE.Mesh(ringGeom, ringMat);
+        ring.position.set(0, 0.01, 0);
+        this.scene.add(ring);
+      }
+
+      setPartColor(partName, colorHex) {
+        const applyColor = (mesh, color) => {
+          if (mesh.material) {
+            mesh.material.color.set(color);
+            if (mesh.material.emissiveIntensity > 0) {
+              mesh.material.emissive.set(color);
+            }
+          }
+        };
+
+        if (partName === 'stripes') {
+          applyColor(this.shoeParts['stripes'], colorHex);
+          applyColor(this.shoeParts['stripes_right'], colorHex);
+        } else if (partName === 'laces') {
+          this.shoeParts['laces'].children.forEach(child => applyColor(child, colorHex));
+        } else if (this.shoeParts[partName]) {
+          applyColor(this.shoeParts[partName], colorHex);
+        }
+      }
+
+      setPartFinish(partName, finish) {
+        const applyFinish = (mesh) => {
+          if (!mesh.material) return;
+          const mat = mesh.material;
+
+          mat.emissive.setHex(0x000000);
+          mat.emissiveIntensity = 0;
+
+          switch(finish) {
+            case 'matte':
+              mat.roughness = 0.9;
+              mat.metalness = 0.0;
+              break;
+            case 'glossy':
+              mat.roughness = 0.15;
+              mat.metalness = 0.1;
+              break;
+            case 'metallic':
+              mat.roughness = 0.25;
+              mat.metalness = 0.85;
+              break;
+            case 'neon':
+              mat.roughness = 0.4;
+              mat.metalness = 0.1;
+              mat.emissive.copy(mat.color);
+              mat.emissiveIntensity = 0.8;
+              break;
+          }
+          mat.needsUpdate = true;
+        };
+
+        if (partName === 'stripes') {
+          applyFinish(this.shoeParts['stripes']);
+          applyFinish(this.shoeParts['stripes_right']);
+        } else if (partName === 'laces') {
+          this.shoeParts['laces'].children.forEach(child => applyFinish(child));
+        } else if (this.shoeParts[partName]) {
+          applyFinish(this.shoeParts[partName]);
+        }
+      }
+
+      setExploded(val) {
+        this.isExploded = val;
+      }
+
+      setAutoRotate(val) {
+        this.isAutoRotating = val;
+        this.controls.autoRotate = val;
+        this.controls.autoRotateSpeed = 2.0;
+      }
+
+      resetCamera() {
+        this.controls.reset();
+        this.camera.position.set(3, 1.8, 3.5);
+        this.controls.target.set(0, 0.4, 0);
+      }
+
+      animate() {
+        requestAnimationFrame(this.animate.bind(this));
+
+        const lerpSpeed = 0.08;
+        const partsToLerp = ['sole', 'upper', 'mesh', 'stripes', 'stripes_right', 'heel'];
+
+        partsToLerp.forEach(name => {
+          const mesh = this.shoeParts[name];
+          if (!mesh) return;
+
+          let targetPos = this.originalPositions[name].clone();
+          if (this.isExploded) {
+            if (name === 'sole') targetPos.y -= 0.35;
+            if (name === 'upper') targetPos.y += 0.25;
+            if (name === 'mesh') { targetPos.y += 0.25; targetPos.x += 0.25; }
+            if (name === 'heel') { targetPos.y += 0.25; targetPos.x -= 0.25; }
+            if (name === 'stripes') { targetPos.z += 0.2; targetPos.y += 0.1; }
+            if (name === 'stripes_right') { targetPos.z -= 0.2; targetPos.y += 0.1; }
+          }
+          mesh.position.lerp(targetPos, lerpSpeed);
+        });
+
+        const laces = this.shoeParts['laces'];
+        if (laces) {
+          let targetLaces = new THREE.Vector3(0, 0, 0);
+          if (this.isExploded) {
+            targetLaces.y += 0.45;
+            targetLaces.x += 0.1;
+          }
+          laces.position.lerp(targetLaces, lerpSpeed);
+        }
+
+        this.controls.update();
+        this.renderer.render(this.scene, this.camera);
+      }
+
+      onWindowResize() {
+        const width = this.container.clientWidth;
+        const height = this.container.clientHeight;
+
+        this.camera.aspect = width / height;
+        this.camera.updateProjectionMatrix();
+
+        this.renderer.setSize(width, height);
+      }
+
+      onPointerDown(event) {
+        const rect = this.renderer.domElement.getBoundingClientRect();
+        this.mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+        this.mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+        this.raycaster.setFromCamera(this.mouse, this.camera);
+        const intersects = this.raycaster.intersectObjects(this.shoeGroup.children, true);
+
+        if (intersects.length > 0) {
+          let clickedMesh = intersects[0].object;
+          let partName = clickedMesh.name;
+
+          if (partName.startsWith('lace_')) {
+            partName = 'laces';
+          } else if (partName === 'stripes_right') {
+            partName = 'stripes';
+          }
+
+          const validParts = ['sole', 'upper', 'mesh', 'stripes', 'laces', 'heel'];
+          if (validParts.includes(partName)) {
+            this.onPartSelected(partName);
+          }
+        }
+      }
+    }
+
+    // -------------------------------------------------------------
+    // APPLICATION CONTROLLER STATE & EVENTS
+    // -------------------------------------------------------------
+    const state = {
+      selectedPart: 'upper',
+      parts: {
+        upper: { color: '#131422', finish: 'matte' },
+        sole: { color: '#00f2fe', finish: 'neon' },
+        mesh: { color: '#0c0d1c', finish: 'matte' },
+        stripes: { color: '#f355da', finish: 'neon' },
+        laces: { color: '#ffffff', finish: 'matte' },
+        heel: { color: '#7f00ff', finish: 'glossy' },
+      },
+      exploded: false,
+      autoRotate: false,
+      price: 189.99
+    };
+
+    const PRESETS = {
+      cyberpunk: {
+        upper: { color: '#0f051d', finish: 'metallic' },
+        sole: { color: '#f355da', finish: 'neon' },
+        mesh: { color: '#080914', finish: 'matte' },
+        stripes: { color: '#00f2fe', finish: 'neon' },
+        laces: { color: '#7f00ff', finish: 'matte' },
+        heel: { color: '#00f2fe', finish: 'glossy' },
+      },
+      stealth: {
+        upper: { color: '#1a1a1a', finish: 'matte' },
+        sole: { color: '#0c0c0d', finish: 'glossy' },
+        mesh: { color: '#2b2b2b', finish: 'matte' },
+        stripes: { color: '#353535', finish: 'metallic' },
+        laces: { color: '#111111', finish: 'matte' },
+        heel: { color: '#1a1a1a', finish: 'matte' },
+      },
+      whitegold: {
+        upper: { color: '#ffffff', finish: 'matte' },
+        sole: { color: '#f3f3f3', finish: 'glossy' },
+        mesh: { color: '#eaeaea', finish: 'matte' },
+        stripes: { color: '#d4af37', finish: 'metallic' },
+        laces: { color: '#ffffff', finish: 'matte' },
+        heel: { color: '#d4af37', finish: 'metallic' },
+      },
+      sunset: {
+        upper: { color: '#ff3e00', finish: 'glossy' },
+        sole: { color: '#111111', finish: 'matte' },
+        mesh: { color: '#ff8f00', finish: 'matte' },
+        stripes: { color: '#ffeb3b', finish: 'neon' },
+        laces: { color: '#111111', finish: 'matte' },
+        heel: { color: '#ff3e00', finish: 'matte' },
+      }
+    };
+
+    let audioCtx = null;
+
+    function playSound(type = 'click') {
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        const now = audioCtx.currentTime;
+
+        if (type === 'click') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(600, now);
+          osc.frequency.exponentialRampToValueAtTime(1200, now + 0.08);
+          gain.gain.setValueAtTime(0.06, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+          osc.start(now);
+          osc.stop(now + 0.08);
+        } else if (type === 'toggle') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(350, now);
+          osc.frequency.setValueAtTime(450, now + 0.06);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+          osc.start(now);
+          osc.stop(now + 0.15);
+        } else if (type === 'checkout') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(523.25, now); // C5
+          osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
+          osc.frequency.setValueAtTime(783.99, now + 0.2); // G5
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+          osc.start(now);
+          osc.stop(now + 0.5);
+        }
+      } catch (err) {
+        console.warn('Audio play blocked or unsupported', err);
+      }
+    }
+
+    const container = document.getElementById('canvas-container');
+    const scene = new SneakerScene(container, (partName) => {
+      selectPart(partName);
+      playSound('click');
+    });
+
+    applyCustomizationState(scene);
+
+    document.querySelectorAll('[data-part]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const part = e.currentTarget.getAttribute('data-part');
+        selectPart(part);
+        playSound('click');
+      });
+    });
+
+    document.querySelectorAll('[data-preset]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const presetName = e.currentTarget.getAttribute('data-preset');
+        applyPreset(presetName, scene);
+        playSound('checkout');
+      });
+    });
+
+    document.querySelectorAll('[data-color]').forEach(dot => {
+      dot.addEventListener('click', (e) => {
+        const color = e.currentTarget.getAttribute('data-color');
+        updateColor(color, scene);
+        playSound('click');
+      });
+    });
+
+    const customColorInput = document.getElementById('custom-color-picker');
+    if (customColorInput) {
+      customColorInput.addEventListener('input', (e) => {
+        updateColor(e.target.value, scene, false);
+      });
+      customColorInput.addEventListener('change', () => {
+        playSound('click');
+      });
+    }
+
+    document.querySelectorAll('[data-finish]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const finish = e.currentTarget.getAttribute('data-finish');
+        updateFinish(finish, scene);
+        playSound('click');
+      });
+    });
+
+    const explodedBtn = document.getElementById('btn-exploded');
+    if (explodedBtn) {
+      explodedBtn.addEventListener('click', () => {
+        state.exploded = !state.exploded;
+        scene.setExploded(state.exploded);
+        explodedBtn.classList.toggle('border-cyan-400', state.exploded);
+        explodedBtn.classList.toggle('text-cyan-400', state.exploded);
+        playSound('toggle');
+      });
+    }
+
+    const rotateBtn = document.getElementById('btn-rotate');
+    if (rotateBtn) {
+      rotateBtn.addEventListener('click', () => {
+        state.autoRotate = !state.autoRotate;
+        scene.setAutoRotate(state.autoRotate);
+        rotateBtn.classList.toggle('border-cyan-400', state.autoRotate);
+        rotateBtn.classList.toggle('text-cyan-400', state.autoRotate);
+        playSound('toggle');
+      });
+    }
+
+    const resetCamBtn = document.getElementById('btn-reset-cam');
+    if (resetCamBtn) {
+      resetCamBtn.addEventListener('click', () => {
+        scene.resetCamera();
+        playSound('click');
+      });
+    }
+
+    const checkoutBtn = document.getElementById('btn-checkout');
+    const addBasketBtn = document.getElementById('btn-add-basket');
+    const cartModal = document.getElementById('cart-modal');
+    const cartSummaryList = document.getElementById('cart-summary-list');
+    const closeCartBtn = document.getElementById('btn-close-cart');
+    const totalDisplay = document.getElementById('cart-total-price');
+
+    const triggerCheckoutView = () => {
+      cartSummaryList.innerHTML = '';
+      Object.entries(state.parts).forEach(([partName, config]) => {
+        const item = document.createElement('div');
+        item.className = 'flex items-center justify-between border-b border-white/5 py-2';
+        item.innerHTML = `
+          <span class="capitalize text-gray-400 font-sans text-sm">${partName}</span>
+          <div class="flex items-center gap-2">
+            <span class="w-4 h-4 rounded-full border border-white/10" style="background-color: ${config.color}"></span>
+            <span class="text-[10px] uppercase bg-white/5 px-2 py-0.5 rounded text-gray-300 font-mono">${config.finish}</span>
+          </div>
+        `;
+        cartSummaryList.appendChild(item);
+      });
+
+      totalDisplay.textContent = `$${state.price}`;
+      cartModal.classList.remove('hidden');
+      cartModal.classList.add('flex');
+      playSound('checkout');
+    };
+
+    if (checkoutBtn && cartModal) checkoutBtn.addEventListener('click', triggerCheckoutView);
+    if (addBasketBtn && cartModal) addBasketBtn.addEventListener('click', triggerCheckoutView);
+
+    if (closeCartBtn && cartModal) {
+      closeCartBtn.addEventListener('click', () => {
+        cartModal.classList.add('hidden');
+        cartModal.classList.remove('flex');
+        playSound('click');
+      });
+    }
+
+    function applyCustomizationState(scene) {
+      Object.entries(state.parts).forEach(([partName, config]) => {
+        scene.setPartColor(partName, config.color);
+        scene.setPartFinish(partName, config.finish);
+      });
+    }
+
+    function selectPart(partName) {
+      state.selectedPart = partName;
+
+      document.querySelectorAll('[data-part]').forEach(btn => {
+        const part = btn.getAttribute('data-part');
+        btn.classList.toggle('active-part', part === partName);
+        btn.classList.toggle('border-white/10', part !== partName);
+        btn.classList.toggle('text-gray-400', part !== partName);
+        btn.classList.toggle('text-white', part === partName);
+      });
+
+      const partLabel = document.getElementById('active-part-label');
+      if (partLabel) partLabel.textContent = partName;
+
+      const currentConfig = state.parts[partName];
+      syncColorDots(currentConfig.color);
+      syncFinishButtons(currentConfig.finish);
+    }
+
+    function updateColor(colorHex, scene, updateInput = true) {
+      state.parts[state.selectedPart].color = colorHex;
+      scene.setPartColor(state.selectedPart, colorHex);
+
+      if (updateInput) {
+        const input = document.getElementById('custom-color-picker');
+        if (input) input.value = colorHex;
+      }
+      syncColorDots(colorHex);
+    }
+
+    function updateFinish(finishName, scene) {
+      state.parts[state.selectedPart].finish = finishName;
+      scene.setPartFinish(state.selectedPart, finishName);
+      syncFinishButtons(finishName);
+    }
+
+    function applyPreset(presetName, scene) {
+      const preset = PRESETS[presetName];
+      if (!preset) return;
+
+      state.parts = JSON.parse(JSON.stringify(preset));
+      applyCustomizationState(scene);
+      selectPart(state.selectedPart);
+    }
+
+    function syncColorDots(activeColor) {
+      document.querySelectorAll('[data-color]').forEach(dot => {
+        const color = dot.getAttribute('data-color');
+        const isActive = color.toLowerCase() === activeColor.toLowerCase();
+        dot.classList.toggle('ring-2', isActive);
+        dot.classList.toggle('ring-cyan-400', isActive);
+      });
+    }
+
+    function syncFinishButtons(activeFinish) {
+      document.querySelectorAll('[data-finish]').forEach(btn => {
+        const finish = btn.getAttribute('data-finish');
+        btn.classList.toggle('active-finish', finish === activeFinish);
+        btn.classList.toggle('border-white/10', finish !== activeFinish);
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+/* Custom Style for 3D Sneaker Customizer */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --neon-cyan: #00f2fe;
+  --neon-magenta: #f355da;
+  --neon-violet: #7f00ff;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  background-color: #080914;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Outfit', sans-serif;
+}
+
+/* Glassmorphism Styles */
+.glass-panel {
+  background: rgba(13, 14, 33, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.12);
+  transform: translateY(-2px);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(8, 9, 20, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.30);
+}
+
+/* Neon Glow Pulsing */
+@keyframes neonPulse {
+  0%, 100% {
+    box-shadow: 0 0 4px rgba(0, 242, 254, 0.2), 0 0 12px rgba(0, 242, 254, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 10px rgba(0, 242, 254, 0.6), 0 0 20px rgba(0, 242, 254, 0.3);
+  }
+}
+
+.neon-pulse-cyan {
+  animation: neonPulse 3s infinite alternate;
+}
+
+@keyframes neonPulseMag {
+  0%, 100% {
+    box-shadow: 0 0 4px rgba(243, 85, 218, 0.2), 0 0 12px rgba(243, 85, 218, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 10px rgba(243, 85, 218, 0.6), 0 0 20px rgba(243, 85, 218, 0.3);
+  }
+}
+
+.neon-pulse-magenta {
+  animation: neonPulseMag 3s infinite alternate;
+}
+
+/* Glowing Neon Text */
+.neon-text-cyan {
+  text-shadow: 0 0 8px rgba(0, 242, 254, 0.6);
+}
+
+.neon-text-magenta {
+  text-shadow: 0 0 8px rgba(243, 85, 218, 0.6);
+}
+
+/* Animated Gradient Text */
+.gradient-text-flow {
+  background: linear-gradient(135deg, var(--neon-cyan) 0%, var(--neon-magenta) 50%, var(--neon-violet) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 4s linear infinite;
+}
+
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
+}
+
+/* Slide in from right */
+.slide-in-right {
+  animation: slideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Active UI Indicator styles */
+.active-part {
+  border-color: var(--neon-cyan) !important;
+  color: var(--neon-cyan) !important;
+}
+
+.active-finish {
+  border-color: var(--neon-magenta) !important;
+  background: rgba(243, 85, 218, 0.1) !important;
+}

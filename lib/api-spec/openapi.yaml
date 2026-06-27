@@ -1,0 +1,896 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: CitizenHub API - AI-Powered Citizen Rights, Laws & Government Services Platform
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: laws
+    description: Laws & Rights operations
+  - name: schemes
+    description: Government Schemes operations
+  - name: services
+    description: Government Services operations
+  - name: complaints
+    description: Complaint Center operations
+  - name: news
+    description: News & Updates operations
+  - name: documents
+    description: Legal Documents operations
+  - name: chat
+    description: AI Assistant operations
+  - name: dashboard
+    description: Dashboard summary operations
+  - name: learning
+    description: Learning Center operations
+  - name: bookmarks
+    description: User Bookmarks operations
+
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  # ── Dashboard ──────────────────────────────────────────────
+  /dashboard/summary:
+    get:
+      operationId: getDashboardSummary
+      tags: [dashboard]
+      summary: Dashboard stats summary
+      responses:
+        "200":
+          description: Summary counts
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardSummary"
+
+  # ── Laws ──────────────────────────────────────────────────
+  /laws:
+    get:
+      operationId: listLaws
+      tags: [laws]
+      summary: List laws
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: featured
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of laws
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Law"
+    post:
+      operationId: createLaw
+      tags: [laws]
+      summary: Create law
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LawInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Law"
+
+  /laws/categories:
+    get:
+      operationId: listLawCategories
+      tags: [laws]
+      summary: List law categories with counts
+      responses:
+        "200":
+          description: Law categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CategoryCount"
+
+  /laws/{id}:
+    get:
+      operationId: getLaw
+      tags: [laws]
+      summary: Get law by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Law details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Law"
+        "404":
+          description: Not found
+
+  # ── Schemes ───────────────────────────────────────────────
+  /schemes:
+    get:
+      operationId: listSchemes
+      tags: [schemes]
+      summary: List government schemes
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: state
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of schemes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Scheme"
+    post:
+      operationId: createScheme
+      tags: [schemes]
+      summary: Create scheme
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SchemeInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Scheme"
+
+  /schemes/categories:
+    get:
+      operationId: listSchemeCategories
+      tags: [schemes]
+      summary: List scheme categories with counts
+      responses:
+        "200":
+          description: Scheme categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CategoryCount"
+
+  /schemes/featured:
+    get:
+      operationId: listFeaturedSchemes
+      tags: [schemes]
+      summary: List featured/popular schemes
+      responses:
+        "200":
+          description: Featured schemes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Scheme"
+
+  /schemes/{id}:
+    get:
+      operationId: getScheme
+      tags: [schemes]
+      summary: Get scheme by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Scheme details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Scheme"
+        "404":
+          description: Not found
+
+  # ── Services ──────────────────────────────────────────────
+  /services:
+    get:
+      operationId: listServices
+      tags: [services]
+      summary: List government services
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: search
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of services
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GovService"
+
+  /services/{id}:
+    get:
+      operationId: getService
+      tags: [services]
+      summary: Get service by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Service details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GovService"
+        "404":
+          description: Not found
+
+  # ── Complaints ────────────────────────────────────────────
+  /complaints:
+    get:
+      operationId: listComplaints
+      tags: [complaints]
+      summary: List complaint guides
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Complaint guides
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ComplaintGuide"
+
+  /complaints/{id}:
+    get:
+      operationId: getComplaint
+      tags: [complaints]
+      summary: Get complaint guide by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Complaint guide details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ComplaintGuide"
+        "404":
+          description: Not found
+
+  # ── News ──────────────────────────────────────────────────
+  /news:
+    get:
+      operationId: listNews
+      tags: [news]
+      summary: List news articles
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: News articles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/NewsArticle"
+
+  /news/{id}:
+    get:
+      operationId: getNewsArticle
+      tags: [news]
+      summary: Get news article by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: News article
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NewsArticle"
+        "404":
+          description: Not found
+
+  # ── Chat / AI Assistant ───────────────────────────────────
+  /chat/messages:
+    get:
+      operationId: listChatMessages
+      tags: [chat]
+      summary: List chat message history
+      responses:
+        "200":
+          description: Chat messages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ChatMessage"
+
+    post:
+      operationId: sendChatMessage
+      tags: [chat]
+      summary: Send a message to AI assistant
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChatMessageInput"
+      responses:
+        "201":
+          description: AI reply
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChatMessage"
+
+  /chat/suggested-questions:
+    get:
+      operationId: listSuggestedQuestions
+      tags: [chat]
+      summary: Get suggested chat questions
+      responses:
+        "200":
+          description: Suggested questions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SuggestedQuestion"
+
+  # ── Documents ─────────────────────────────────────────────
+  /documents/templates:
+    get:
+      operationId: listDocumentTemplates
+      tags: [documents]
+      summary: List document templates
+      responses:
+        "200":
+          description: Document templates
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DocumentTemplate"
+
+  /documents/generate:
+    post:
+      operationId: generateDocument
+      tags: [documents]
+      summary: Generate a document from template
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DocumentGenInput"
+      responses:
+        "200":
+          description: Generated document content
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GeneratedDocument"
+
+  # ── Learning Center ───────────────────────────────────────
+  /learning/courses:
+    get:
+      operationId: listCourses
+      tags: [learning]
+      summary: List learning courses
+      responses:
+        "200":
+          description: Courses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Course"
+
+  /learning/quizzes:
+    get:
+      operationId: listQuizzes
+      tags: [learning]
+      summary: List quizzes
+      responses:
+        "200":
+          description: Quizzes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Quiz"
+
+  # ── Bookmarks ─────────────────────────────────────────────
+  /bookmarks:
+    get:
+      operationId: listBookmarks
+      tags: [bookmarks]
+      summary: List user bookmarks
+      responses:
+        "200":
+          description: Bookmarks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Bookmark"
+    post:
+      operationId: createBookmark
+      tags: [bookmarks]
+      summary: Add a bookmark
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BookmarkInput"
+      responses:
+        "201":
+          description: Created bookmark
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bookmark"
+
+  /bookmarks/{id}:
+    delete:
+      operationId: deleteBookmark
+      tags: [bookmarks]
+      summary: Remove a bookmark
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+
+    DashboardSummary:
+      type: object
+      required: [totalLaws, totalSchemes, totalServices, totalNews, recentLaws, popularSchemes]
+      properties:
+        totalLaws:
+          type: integer
+        totalSchemes:
+          type: integer
+        totalServices:
+          type: integer
+        totalNews:
+          type: integer
+        recentLaws:
+          type: array
+          items:
+            $ref: "#/components/schemas/Law"
+        popularSchemes:
+          type: array
+          items:
+            $ref: "#/components/schemas/Scheme"
+
+    CategoryCount:
+      type: object
+      required: [category, count]
+      properties:
+        category:
+          type: string
+        count:
+          type: integer
+        icon:
+          type: ["string", "null"]
+
+    Law:
+      type: object
+      required: [id, title, category, summary, createdAt]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        category:
+          type: string
+        summary:
+          type: string
+        purpose:
+          type: ["string", "null"]
+        rights:
+          type: ["string", "null"]
+        responsibilities:
+          type: ["string", "null"]
+        penalties:
+          type: ["string", "null"]
+        examples:
+          type: ["string", "null"]
+        faq:
+          type: ["string", "null"]
+        references:
+          type: ["string", "null"]
+        isFeatured:
+          type: boolean
+        viewCount:
+          type: integer
+        createdAt:
+          type: string
+
+    LawInput:
+      type: object
+      required: [title, category, summary]
+      properties:
+        title:
+          type: string
+        category:
+          type: string
+        summary:
+          type: string
+        purpose:
+          type: string
+        rights:
+          type: string
+        responsibilities:
+          type: string
+        penalties:
+          type: string
+        examples:
+          type: string
+        faq:
+          type: string
+        references:
+          type: string
+        isFeatured:
+          type: boolean
+
+    Scheme:
+      type: object
+      required: [id, title, category, description, createdAt]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        category:
+          type: string
+        description:
+          type: string
+        benefits:
+          type: ["string", "null"]
+        eligibility:
+          type: ["string", "null"]
+        documents:
+          type: ["string", "null"]
+        applicationProcess:
+          type: ["string", "null"]
+        officialSource:
+          type: ["string", "null"]
+        stateApplicability:
+          type: ["string", "null"]
+        isFeatured:
+          type: boolean
+        viewCount:
+          type: integer
+        createdAt:
+          type: string
+
+    SchemeInput:
+      type: object
+      required: [title, category, description]
+      properties:
+        title:
+          type: string
+        category:
+          type: string
+        description:
+          type: string
+        benefits:
+          type: string
+        eligibility:
+          type: string
+        documents:
+          type: string
+        applicationProcess:
+          type: string
+        officialSource:
+          type: string
+        stateApplicability:
+          type: string
+        isFeatured:
+          type: boolean
+
+    GovService:
+      type: object
+      required: [id, title, category, overview, createdAt]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        category:
+          type: string
+        overview:
+          type: string
+        eligibility:
+          type: ["string", "null"]
+        requiredDocuments:
+          type: ["string", "null"]
+        fees:
+          type: ["string", "null"]
+        processingTime:
+          type: ["string", "null"]
+        applicationProcess:
+          type: ["string", "null"]
+        officialUrl:
+          type: ["string", "null"]
+        icon:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+
+    ComplaintGuide:
+      type: object
+      required: [id, title, category, issue, createdAt]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        category:
+          type: string
+        issue:
+          type: string
+        steps:
+          type: ["string", "null"]
+        authority:
+          type: ["string", "null"]
+        officialPortal:
+          type: ["string", "null"]
+        downloadableFormats:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+
+    NewsArticle:
+      type: object
+      required: [id, title, category, summary, publishedAt]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        category:
+          type: string
+        summary:
+          type: string
+        content:
+          type: ["string", "null"]
+        source:
+          type: ["string", "null"]
+        imageUrl:
+          type: ["string", "null"]
+        publishedAt:
+          type: string
+
+    ChatMessage:
+      type: object
+      required: [id, role, content, createdAt]
+      properties:
+        id:
+          type: integer
+        role:
+          type: string
+        content:
+          type: string
+        language:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+
+    ChatMessageInput:
+      type: object
+      required: [content]
+      properties:
+        content:
+          type: string
+        language:
+          type: string
+
+    SuggestedQuestion:
+      type: object
+      required: [id, question, category]
+      properties:
+        id:
+          type: integer
+        question:
+          type: string
+        category:
+          type: string
+
+    DocumentTemplate:
+      type: object
+      required: [id, name, description, fields]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        fields:
+          type: string
+        category:
+          type: string
+
+    DocumentGenInput:
+      type: object
+      required: [templateId, fieldValues]
+      properties:
+        templateId:
+          type: integer
+        fieldValues:
+          type: object
+          additionalProperties:
+            type: string
+
+    GeneratedDocument:
+      type: object
+      required: [content, templateName]
+      properties:
+        content:
+          type: string
+        templateName:
+          type: string
+
+    Course:
+      type: object
+      required: [id, title, description, lessons, xpReward]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        lessons:
+          type: integer
+        xpReward:
+          type: integer
+        category:
+          type: ["string", "null"]
+        icon:
+          type: ["string", "null"]
+
+    Quiz:
+      type: object
+      required: [id, title, questions, xpReward]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        questions:
+          type: integer
+        xpReward:
+          type: integer
+        category:
+          type: ["string", "null"]
+
+    Bookmark:
+      type: object
+      required: [id, contentType, contentId, contentTitle, createdAt]
+      properties:
+        id:
+          type: integer
+        contentType:
+          type: string
+        contentId:
+          type: integer
+        contentTitle:
+          type: string
+        createdAt:
+          type: string
+
+    BookmarkInput:
+      type: object
+      required: [contentType, contentId, contentTitle]
+      properties:
+        contentType:
+          type: string
+        contentId:
+          type: integer
+        contentTitle:
+          type: string
