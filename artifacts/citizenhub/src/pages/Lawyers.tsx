@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Briefcase, Search, Phone, Mail, Clock, MapPin, Landmark, Globe, CheckCircle, PlusCircle, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
 
 interface Lawyer {
   id: number;
@@ -397,6 +398,8 @@ export default function Lawyers() {
   const [search, setSearch] = useState("");
   const [registeredLawyers, setRegisteredLawyers] = useState<Lawyer[]>([]);
   const [showModal, setShowModal] = useState(false);
+  const { toast } = useToast();
+  const [formLoading, setFormLoading] = useState(false);
 
   // Form Fields State
   const [formName, setFormName] = useState("");
@@ -417,17 +420,23 @@ export default function Lawyers() {
   // Sync state selection in form
   const formDistricts = STATE_DISTRICTS_MAP[formState] || [];
   
-  // Load custom lawyers from localStorage on mount
+  // Load custom lawyers from database on mount or when formSuccess changes
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem("citizenhub_registered_lawyers");
-      if (stored) {
-        setRegisteredLawyers(JSON.parse(stored));
-      }
-    } catch (e) {
-      console.error("Failed to load registered lawyers:", e);
-    }
-  }, []);
+    const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
+    fetch(`${BASE}/api/lawyers?status=approved`)
+      .then((res) => {
+        if (res.ok) return res.json();
+        return [];
+      })
+      .then((data) => {
+        const parsed = data.map((l: any) => ({
+          ...l,
+          languages: typeof l.languages === "string" ? JSON.parse(l.languages) : l.languages
+        }));
+        setRegisteredLawyers(parsed);
+      })
+      .catch(() => {});
+  }, [formSuccess]);
 
   const activeDistricts = STATE_DISTRICTS_MAP[selectedState] || [];
 
@@ -496,50 +505,54 @@ export default function Lawyers() {
       return;
     }
 
-    const newAdvocate: Lawyer = {
-      id: Date.now(),
-      name: `Adv. ${formName.startsWith("Adv. ") ? formName.substring(5) : formName}`,
-      specialization: formSpec,
-      experience: `${expVal} Years Experience`,
-      courts: formCourts,
-      phone: formPhone,
-      email: formEmail,
-      languages: formLanguages.split(",").map((l) => l.trim()).filter(Boolean),
-      address: formAddress,
-      hours: formHours,
-      state: formState,
-      district: formDistrict
-    };
-
-    try {
-      const stored = localStorage.getItem("citizenhub_registered_lawyers");
-      const list = stored ? JSON.parse(stored) : [];
-      list.unshift(newAdvocate);
-      localStorage.setItem("citizenhub_registered_lawyers", JSON.stringify(list));
-      
-      setRegisteredLawyers(list);
-      setFormSuccess(true);
-      
-      // Clear form
-      setFormName("");
-      setFormExp("");
-      setFormCourts("");
-      setFormPhone("");
-      setFormEmail("");
-      setFormAddress("");
-      
-      // Keep state and district so they can view their addition
-      setSelectedState(formState);
-      setSelectedDistrict(formDistrict);
-
-      setTimeout(() => {
+    setFormLoading(true);
+    const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
+    
+    fetch(`${BASE}/api/lawyers`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: `Adv. ${formName.startsWith("Adv. ") ? formName.substring(5) : formName}`,
+        specialization: formSpec,
+        experience: `${expVal} Years Experience`,
+        courts: formCourts,
+        phone: formPhone,
+        email: formEmail,
+        languages: formLanguages.split(",").map((l) => l.trim()).filter(Boolean),
+        address: formAddress,
+        hours: formHours,
+        state: formState,
+        district: formDistrict
+      })
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to submit advocate details.");
+        return res.json();
+      })
+      .then(() => {
+        setFormSuccess(true);
+        toast({
+          title: "Registration Submitted",
+          description: "Your advocate profile has been submitted for admin approval.",
+        });
+        
+        // Clear fields
+        setFormName("");
+        setFormExp("");
+        setFormCourts("");
+        setFormPhone("");
+        setFormEmail("");
+        setFormLanguages("");
+        setFormAddress("");
+        setFormHours("");
         setShowModal(false);
-        setFormSuccess(false);
-      }, 1500);
-
-    } catch (err) {
-      setFormError("Failed to save registration. Please try again.");
-    }
+      })
+      .catch(() => {
+        setFormError("Failed to register. Please check your network connection.");
+      })
+      .finally(() => {
+        setFormLoading(false);
+      });
   };
 
   return (
@@ -875,8 +888,12 @@ export default function Lawyers() {
                   </button>
                   <button
                     type="submit"
-                    className="bg-primary text-primary-foreground px-5 py-2 rounded-lg text-xs font-semibold hover:opacity-90 transition-opacity cursor-pointer shadow btn-3d"
+                    disabled={formLoading}
+                    className="bg-primary text-primary-foreground px-5 py-2 rounded-lg text-xs font-semibold hover:opacity-90 transition-opacity cursor-pointer shadow btn-3d flex items-center gap-1.5"
                   >
+                    {formLoading ? (
+                      <span className="w-3.5 h-3.5 border-2 border-primary-foreground/35 border-t-primary-foreground rounded-full animate-spin" />
+                    ) : null}
                     Register Advocate
                   </button>
                 </div>

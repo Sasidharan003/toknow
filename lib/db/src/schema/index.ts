@@ -7,3 +7,5 @@ export * from "./chat";
 export * from "./documents";
 export * from "./learning";
 export * from "./bookmarks";
+export * from "./users";
+export * from "./lawyers";

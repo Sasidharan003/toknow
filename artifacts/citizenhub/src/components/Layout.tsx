@@ -1,11 +1,27 @@
 import { Link, useLocation } from "wouter";
-import { BookOpen, Home, Scale, FileText, User, MessageCircle, Info, Landmark, AlertTriangle, Newspaper, Bookmark, MapPin, FilePlus, Trophy, Briefcase, Menu, X } from "lucide-react";
+import { BookOpen, Home, Scale, FileText, User, MessageCircle, Info, Landmark, AlertTriangle, Newspaper, Bookmark, MapPin, FilePlus, Trophy, Briefcase, Menu, X, Shield, LogOut } from "lucide-react";
 import { useState, useEffect } from "react";
 
-export function Layout({ children }: { children: React.ReactNode }) {
+export function Layout({ 
+  children,
+  user,
+  onLogout
+}: { 
+  children: React.ReactNode;
+  user?: { id: number; email: string; role: string } | null;
+  onLogout?: () => void;
+}) {
   const [xp, setXp] = useState(0);
   const [location] = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const handleLogout = async () => {
+    const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
+    try {
+      await fetch(`${BASE}/api/auth/logout`, { method: "POST" });
+      if (onLogout) onLogout();
+    } catch (e) {}
+  };
 
   useEffect(() => {
     function updateXp() {
@@ -80,6 +96,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <SidebarLink href="/learning" icon={<BookOpen size={18} />} label="Learning Center" />
             <SidebarLink href="/news" icon={<Newspaper size={18} />} label="News & Updates" />
             <SidebarLink href="/profile" icon={<User size={18} />} label="My Profile" />
+            {user?.role === "admin" && (
+              <SidebarLink href="/admin" icon={<Shield size={18} />} label="Admin Console" />
+            )}
+            {onLogout && (
+              <button
+                onClick={handleLogout}
+                className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-muted-foreground hover:bg-red-500/10 hover:text-red-500 transition-colors mt-6 text-left cursor-pointer font-medium text-sm border border-transparent"
+              >
+                <LogOut size={18} />
+                <span>Sign Out</span>
+              </button>
+            )}
           </nav>
         </aside>
 
@@ -132,6 +160,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <SidebarLink href="/learning" icon={<BookOpen size={18} />} label="Learning Center" onClick={() => setIsMobileMenuOpen(false)} />
               <SidebarLink href="/news" icon={<Newspaper size={18} />} label="News & Updates" onClick={() => setIsMobileMenuOpen(false)} />
               <SidebarLink href="/profile" icon={<User size={18} />} label="My Profile" onClick={() => setIsMobileMenuOpen(false)} />
+              {user?.role === "admin" && (
+                <SidebarLink href="/admin" icon={<Shield size={18} />} label="Admin Console" onClick={() => setIsMobileMenuOpen(false)} />
+              )}
+              {onLogout && (
+                <button
+                  onClick={() => { setIsMobileMenuOpen(false); handleLogout(); }}
+                  className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-muted-foreground hover:bg-red-500/10 hover:text-red-500 transition-colors mt-6 text-left cursor-pointer font-medium text-sm border border-transparent"
+                >
+                  <LogOut size={18} />
+                  <span>Sign Out</span>
+                </button>
+              )}
             </nav>
             
             {/* Mobile Level Info */}

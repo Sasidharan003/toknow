@@ -2762,5 +2762,7 @@ export const SEED_DATA: Record<string, any[]> = {
       "category": "PAN"
     }
   ],
-  "bookmarks": []
+  "bookmarks": [],
+  "users": [],
+  "lawyers": []
 };

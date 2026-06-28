@@ -10,6 +10,8 @@ import chatRouter from "./chat";
 import documentsRouter from "./documents";
 import learningRouter from "./learning";
 import bookmarksRouter from "./bookmarks";
+import authRouter from "./auth";
+import lawyersRouter from "./lawyers";
 
 const router: IRouter = Router();
 
@@ -24,5 +26,7 @@ router.use(chatRouter);
 router.use(documentsRouter);
 router.use(learningRouter);
 router.use(bookmarksRouter);
+router.use(authRouter);
+router.use(lawyersRouter);
 
 export default router;

@@ -1,6 +1,8 @@
 import fs from "fs";
 import path from "path";
 import * as schema from "./schema";
+import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres";
+import pg from "pg";
 
 const DB_PATH = path.join(__dirname, "../../../db.json");
 
@@ -374,14 +376,29 @@ class MockQueryBuilder {
 }
 
 // ─── Exported mock db client interface ───────────────────────────────────────
-export const db = {
+const mockDb = {
   select: (fields?: any) => new MockQueryBuilder('select', fields),
   insert: (table: any) => new MockQueryBuilder('insert', table),
   update: (table: any) => new MockQueryBuilder('update', table),
   delete: (table: any) => new MockQueryBuilder('delete', table),
 };
 
+let dbInstance: any;
+
+if (process.env.DATABASE_URL) {
+  const pool = new pg.Pool({
+    connectionString: process.env.DATABASE_URL
+  });
+  dbInstance = drizzle(pool, { schema });
+} else {
+  dbInstance = mockDb;
+}
+
+export const db = dbInstance as typeof mockDb & NodePgDatabase<typeof schema>;
+
 // Make sure to populate the database on load if it doesn't exist
-readDb();
+if (!process.env.DATABASE_URL) {
+  readDb();
+}
 
 export * from "./schema";
